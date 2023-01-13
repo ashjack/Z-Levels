@@ -455,7 +455,7 @@ namespace ZLevels
                         return null;
                     }
                 }
-                float nutrition = FoodUtility.GetNutrition(foodSource, foodDef);
+                float nutrition = FoodUtility.GetNutrition(pawn, foodSource, foodDef);
                 Pawn pawn3 = (foodSource.ParentHolder as Pawn_InventoryTracker)?.pawn;
                 if (pawn3 != null && pawn3 != pawn)
                 {
@@ -839,6 +839,9 @@ namespace ZLevels
             private static IntVec3 FindGroundSleepSpotFor(Pawn pawn)
             {
                 Map map = pawn.Map;
+                ZUtils.currentLookedIntoMap = map;
+                //ZUtils.ZTracker.jobTracker.TryGetValue( pawn, out var jobTracker );
+                //var localCellMap = jobTracker?.lookedAtLocalCellMap;
                 for (int i = 0; i < 2; i++)
                 {
                     int radius = (i == 0) ? 4 : 12;
@@ -1233,13 +1236,13 @@ namespace ZLevels
                 {
                     Bill bill = giver.BillStack[i];
                     if ((bill.recipe.requiredGiverWorkType != null && bill.recipe.requiredGiverWorkType
-                        != scanner.def.workType) || (Find.TickManager.TicksGame < bill.lastIngredientSearchFailTicks
+                        != scanner.def.workType) || (Find.TickManager.TicksGame < bill.nextTickToSearchForIngredients
                         + WorkGiver_DoBill.ReCheckFailedBillTicksRange.RandomInRange
                         && FloatMenuMakerMap.makingFor != pawn))
                     {
                         continue;
                     }
-                    bill.lastIngredientSearchFailTicks = 0;
+                    bill.nextTickToSearchForIngredients = 0;
                     if (!bill.ShouldDoNow() || !bill.PawnAllowedToStartAnew(pawn))
                     {
                         continue;
@@ -1295,7 +1298,7 @@ namespace ZLevels
                             }
                             workBench.mapIndexOrState = (sbyte)Find.Maps.IndexOf(map);
                             pawn.mapIndexOrState = (sbyte)Find.Maps.IndexOf(map);
-                            flag = WorkGiver_DoBill.TryFindBestBillIngredients(bill, pawn, (Thing)giver, chosenIngThings);
+                            flag = WorkGiver_DoBill.TryFindBestBillIngredients(bill, pawn, (Thing)giver, chosenIngThings, bill.recipe.ingredients);
                             ZLogger.Message("Found ingredients: " + flag + " in " + ZTracker.GetMapInfo(map) + " for " + bill);
                             if (flag) break;
                         }
@@ -1313,7 +1316,7 @@ namespace ZLevels
                     {
                         if (FloatMenuMakerMap.makingFor != pawn)
                         {
-                            bill.lastIngredientSearchFailTicks = Find.TickManager.TicksGame;
+                            bill.nextTickToSearchForIngredients = Find.TickManager.TicksGame;
                         }
                         else
                         {

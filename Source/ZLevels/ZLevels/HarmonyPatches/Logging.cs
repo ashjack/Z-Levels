@@ -16,19 +16,19 @@ namespace ZLevels
         {
             foreach (var type in typeof(JobDriver).AllSubclassesNonAbstract())
             {
-                var method = AccessTools.Method(type, "TryMakePreToilReservations");
+                var method = AccessTools.Method(type, "TryMakePreToilReservations2");
                 if (method != null)
                 {
                     try
                     {
-                        ZLevelsMod.harmony.Patch(method, new HarmonyMethod(AccessTools.Method(typeof(JobLogging), nameof(TryMakePreToilReservationsLog))));
+                        ZLevelsMod.harmony.Patch(method, new HarmonyMethod(AccessTools.Method(typeof(JobLogging), nameof(TryMakePreToilReservationsLog2))));
                     }
                     catch { };
                 }
             }
         }
 
-        public static void TryMakePreToilReservationsLog(JobDriver __instance)
+        public static void TryMakePreToilReservationsLog2(JobDriver __instance)
         {
             ZLogger.Message(__instance.pawn + " is doing TryMakePreToilReservations, job: " + __instance.job + " - jobdriver: " + __instance);
         }

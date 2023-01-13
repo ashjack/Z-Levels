@@ -9,11 +9,11 @@ using Verse;
 
 namespace ZLevels
 {
-	[HarmonyPatch(typeof(GenView), "ShouldSpawnMotesAt", new Type[] { typeof(IntVec3), typeof(Map)})]
+	[HarmonyPatch(typeof(GenView), "ShouldSpawnMotesAt", new Type[] { typeof(IntVec3), typeof(Map), typeof(bool)})]
 	public static class ShouldSpawnMotesAt_Patch
 	{
 		private static CellRect viewRect;
-		public static bool Prefix(ref bool __result, IntVec3 loc, Map map)
+		public static bool Prefix(ref bool __result, IntVec3 loc, Map map, bool drawOffscreen = true)
 		{
 			if (map != null)
             {
