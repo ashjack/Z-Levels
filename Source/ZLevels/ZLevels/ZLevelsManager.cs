@@ -1244,7 +1244,7 @@ namespace ZLevels
                     }
                     else
                     {
-                        ZLogger.Pause($"Fail in TryMakePreToilReservations, pawn: {pawn}, job: {job}, driver: {job.GetCachedDriver(pawn)}, map: {this.GetMapInfo(pawn.Map)}");
+                        //ZLogger.Pause($"Fail in TryMakePreToilReservations, pawn: {pawn}, job: {job}, driver: {job.GetCachedDriver(pawn)}, map: {this.GetMapInfo(pawn.Map)}");
                         this.ResetJobTrackerFor(pawn);
                     }
                 }
