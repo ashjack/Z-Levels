@@ -1129,7 +1129,7 @@ namespace ZLevels
                         && ZTracker.jobTracker[___pawn].activeJobs?.Count > 0)
                     {
                         TryDropCarriedThingPatch.blockTryDrop = false;
-                        ZTracker.TryTakeFirstJob(___pawn);
+                        ZTracker.TryTakeFirstJob(___pawn, true);
                     }
                 }
             }
@@ -1181,7 +1181,7 @@ namespace ZLevels
                         bool select = false;
                         if (Find.Selector.SelectedObjects.Contains(pawn)) select = true;
                         ZTracker.ResetJobTrackerFor(pawn);
-
+                        
                         try
                         {
                             jobTracker.searchingJobsNow = true;
@@ -1224,7 +1224,22 @@ namespace ZLevels
                     }
                     catch (Exception ex)
                     {
-                        Log.Error("Some kind of error occurred in Z-Levels JobManager: " + ex);
+                        if (__instance == null)
+                        {
+                            Log.Error("INSTANCE Some kind of error occurred in Z-Levels JobManager: " + ex);
+                        }
+                        else if (pawn == null)
+                        {
+                            Log.Error("PAWN Some kind of error occurred in Z-Levels JobManager: " + ex);
+                        }
+                        else if (__result == null)
+                        {
+                            Log.Error("RESULT Some kind of error occurred in Z-Levels JobManager: " + ex);
+                        }
+                        else
+                        {
+                            Log.Error("OTHER Some kind of error occurred in Z-Levels JobManager: " + ex);
+                        }
                     }
                 }
                 return true;
